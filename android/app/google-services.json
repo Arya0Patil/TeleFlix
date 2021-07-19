@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "742172173183",
+    "firebase_url": "https://telemovie443101-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "telemovie443101",
+    "storage_bucket": "telemovie443101.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:742172173183:android:320e604e184707a0f8704a",
+        "android_client_info": {
+          "package_name": "com.telemovie.tech"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "742172173183-dr0lr5ret0k49l6gelshotngdpiqou7d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBW8doauE3PmtTi3cI_9JbLfj79S1pF5q8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "742172173183-dr0lr5ret0k49l6gelshotngdpiqou7d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
