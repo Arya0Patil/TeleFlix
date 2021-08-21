@@ -1,25 +1,17 @@
 import 'package:flutter/cupertino.dart';
-import'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
-import 'package:telemovies/bollywoodSearch.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-
-
 
 //*******************************Bollywood Movie Screen*********************************************** */
 
-
 class Bollywood_Screen extends StatefulWidget {
-
   @override
   _Bollywood_ScreenState createState() => _Bollywood_ScreenState();
 }
 
 class _Bollywood_ScreenState extends State<Bollywood_Screen> {
-  
   // TextEditingController _searchController = TextEditingController();
   // Map<String, dynamic> userMap;
   //
@@ -55,25 +47,27 @@ class _Bollywood_ScreenState extends State<Bollywood_Screen> {
   //   print(_searchController.text);
   // }
 
-
   final db = FirebaseFirestore.instance;
 
-  final snackBar = SnackBar(content: Padding(
-    padding: const EdgeInsets.all(10.0),
-    child: Text(' Link Copied to Clipboard ',
-    style: TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 16,
+  final snackBar = SnackBar(
+    content: Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Text(
+        ' Link Copied to Clipboard ',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+        ),
+      ),
     ),
-    ),
-  )
-    ,backgroundColor: Colors.lightBlue,
-    behavior: SnackBarBehavior.floating,);
+    backgroundColor: Colors.lightBlue,
+    behavior: SnackBarBehavior.floating,
+  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.orangeAccent,
+      backgroundColor: Colors.orangeAccent,
       appBar: AppBar(
         title: Text('Bollywood Movies'),
         elevation: 1.0,
@@ -92,9 +86,8 @@ class _Bollywood_ScreenState extends State<Bollywood_Screen> {
       ), //appbar
 
       body: Container(
-
         child: Column(
-          children:<Widget> [
+          children: <Widget>[
             // Padding(
             //   padding: const EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5.0),
             //   child: TextField(
@@ -129,15 +122,12 @@ class _Bollywood_ScreenState extends State<Bollywood_Screen> {
                     );
                   } else
                     return ListView(
-
-                      children:
-                      snapshot.data.docs.map((doc) {
+                      children: snapshot.data.docs.map((doc) {
                         return Card(
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(5.0)
-                            ),
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5.0)),
                             child: ListTile(
                               // leading: Image.network(doc['Poster'], fit: BoxFit.fill,
                               //   width: 100.0,
@@ -147,7 +137,6 @@ class _Bollywood_ScreenState extends State<Bollywood_Screen> {
                                 child: Text(doc['Title']),
                               ),
                               trailing: IconButton(
-
                                 icon: Icon(
                                   Icons.send,
                                 ),
@@ -157,12 +146,15 @@ class _Bollywood_ScreenState extends State<Bollywood_Screen> {
                                 onPressed: () {
                                   String _url = doc['DownloadLink'];
                                   void _launchURL() async =>
-                                      await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
+                                      await canLaunch(_url)
+                                          ? await launch(_url)
+                                          : throw 'Could not launch $_url';
                                   _launchURL();
 
-                                  Clipboard.setData(ClipboardData(text: doc['DownloadLink']));
-                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
+                                  Clipboard.setData(
+                                      ClipboardData(text: doc['DownloadLink']));
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
                                 },
                               ),
                               subtitle: Column(
@@ -175,10 +167,8 @@ class _Bollywood_ScreenState extends State<Bollywood_Screen> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(doc['rdate']),
                                   ),
-
                                 ],
                               ),
-
                             ),
                           ),
                         );

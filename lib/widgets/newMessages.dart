@@ -43,15 +43,20 @@ class _NewMessageState extends State<NewMessage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(top: 8.0),
-        padding: EdgeInsets.all(8.0),
+        height: 70,
+        padding: EdgeInsets.all(5.0),
         child: Row(
           children: [
             Expanded(
                 child: TextField(
               controller: _controller,
               decoration: InputDecoration(
-                labelText: 'Send new message',
+                border: new OutlineInputBorder(
+                  borderRadius: new BorderRadius.circular(20.0),
+                  borderSide: new BorderSide(),
+                ),
+                contentPadding: EdgeInsets.fromLTRB(10.0, 8.0, 5.0, 5.0),
+                labelText: 'Request Movie',
               ),
               onChanged: (value) {
                 setState(() {

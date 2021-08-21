@@ -1,15 +1,21 @@
-import 'dart:io';
-
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:telemovies/widgets/messages.dart';
 import 'package:telemovies/widgets/newMessages.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import '../ad_helper.dart';
 
 class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        bottomNavigationBar: Container(
+          height: 60.0,
+          child: AdWidget(
+            key: UniqueKey(),
+            ad: AdHelper.createBannerAd()..load(),
+          ),
+        ),
         appBar: AppBar(
           actions: [
             DropdownButton(
@@ -43,7 +49,7 @@ class ChatScreen extends StatelessWidget {
               ),
             )
           ],
-          title: Text('Chatzz'),
+          title: Text('Live Chat'),
         ),
         body: Container(
           child: Column(

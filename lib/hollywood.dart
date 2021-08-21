@@ -1,15 +1,12 @@
-import'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'hollywoodSearch.dart';
 
-
 //*******************************Bollywood Movie Screen*********************************************** */
 
 class Hollywood_Screen extends StatefulWidget {
-
   @override
   _Hollywood_ScreenState createState() => _Hollywood_ScreenState();
 }
@@ -33,41 +30,38 @@ class _Hollywood_ScreenState extends State<Hollywood_Screen> {
 
   final hdb = FirebaseFirestore.instance;
 
-  final snackBar = SnackBar(content: Padding(
-    padding: const EdgeInsets.all(10.0),
-    child: Text(' Link Copied ',
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 16,
+  final snackBar = SnackBar(
+    content: Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Text(
+        ' Link Copied ',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+        ),
       ),
     ),
-  )
-    ,backgroundColor: Colors.lightBlue,
+    backgroundColor: Colors.lightBlue,
     behavior: SnackBarBehavior.floating,
-      action: SnackBarAction(
-          label:'Click',
-        onPressed:(){}
-  ),);
+    action: SnackBarAction(label: 'Click', onPressed: () {}),
+  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xff31112c),
       appBar: AppBar(
-
         title: Text('Hollywood Movies'),
         elevation: 1.0,
         backgroundColor: Color(0xFF1B2C38),
         actions: <Widget>[
-        IconButton(
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => HollywoodSearch()));
-          },
-          icon: Icon(Icons.search),
-        ), //iconbutton
+          IconButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => HollywoodSearch()));
+            },
+            icon: Icon(Icons.search),
+          ), //iconbutton
         ], //action widget
       ), //appbar
 
@@ -80,7 +74,6 @@ class _Hollywood_ScreenState extends State<Hollywood_Screen> {
             );
           } else
             return ListView(
-
               children: snapshot.data.docs.map((doc) {
                 return Card(
                   child: ListTile(
@@ -97,11 +90,13 @@ class _Hollywood_ScreenState extends State<Hollywood_Screen> {
                       splashColor: Colors.purple,
                       onPressed: () {
                         String _url = doc['HDownloadLink'];
-                        void _launchURL() async =>
-                            await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
+                        void _launchURL() async => await canLaunch(_url)
+                            ? await launch(_url)
+                            : throw 'Could not launch $_url';
                         _launchURL();
 
-                        Clipboard.setData(ClipboardData(text: doc['HDownloadLink']));
+                        Clipboard.setData(
+                            ClipboardData(text: doc['HDownloadLink']));
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       },
                     ),

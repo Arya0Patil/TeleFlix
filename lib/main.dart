@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +11,7 @@ import 'hollywoodSearch.dart';
 import 'ad_helper.dart';
 import 'regionalHits.dart';
 
-
-
-
-void main()  async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,8 +21,6 @@ void main()  async {
 }
 
 class MyApp extends StatelessWidget {
-
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -70,6 +63,14 @@ class MyApp extends StatelessWidget {
             children: <Widget>[
               MovieApp(),
               chatScreen(),
+              // StreamBuilder(
+              //     stream: FirebaseAuth.instance.authStateChanges(),
+              //     builder: (ctx, userSnapshot) {
+              //       if (userSnapshot.hasData) {
+              //         return ChatScreen();
+              //       }
+              //       return AuthScreen1();
+              //     }),
             ],
           ), //tabbarview
         ), //scaffold
@@ -89,26 +90,23 @@ class MovieApp extends StatefulWidget {
 }
 
 class _MovieAppState extends State<MovieApp> {
-
-
-
-  @override initState(){
+  @override
+  initState() {
     super.initState();
 
-    UnityAds.init(gameId: "4217249",
+    UnityAds.init(
+      gameId: "4217249",
       testMode: false,
     );
   }
 
-
-
-  void loadVideoAd()async{
+  void loadVideoAd() async {
     UnityAds.isReady(placementId: "bmi").then((value) {
-      if(value== true){
-        UnityAds.showVideoAd(placementId: "bmi",
-
+      if (value == true) {
+        UnityAds.showVideoAd(
+          placementId: "bmi",
         );
-      }else{
+      } else {
         print('ads not loaded');
       }
     });
@@ -116,8 +114,6 @@ class _MovieAppState extends State<MovieApp> {
 
   final db = FirebaseFirestore.instance;
   AdHelper adHelper = new AdHelper();
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -131,18 +127,20 @@ class _MovieAppState extends State<MovieApp> {
         bottomNavigationBar: Container(
           height: 75.0,
           padding: EdgeInsets.all(10.0),
-          child: AdWidget(key: UniqueKey(),ad: AdHelper.createBannerAd()..load(),),
+          child: AdWidget(
+            key: UniqueKey(),
+            ad: AdHelper.createBannerAd()..load(),
+          ),
         ),
         backgroundColor: Colors.transparent,
-      //     The JKS keystore uses a proprietary format. It is recommended to migrate to PKCS12 which is an industry standard format using "keytool -importkeystore -
-      // srckeystore c:\Users\one\upload-keystore.jks -destkeystore c:\Users\one\upload-keystore.jks -deststoretype pkcs12".
+        //     The JKS keystore uses a proprietary format. It is recommended to migrate to PKCS12 which is an industry standard format using "keytool -importkeystore -
+        // srckeystore c:\Users\one\upload-keystore.jks -destkeystore c:\Users\one\upload-keystore.jks -deststoretype pkcs12".
 
         body: Padding(
           padding: const EdgeInsets.only(top: 1.0),
           child: ListView(
             children: [
               SizedBox(height: 12.0), //sizedbox
-
 
               Row(
                 children: [
@@ -162,75 +160,75 @@ class _MovieAppState extends State<MovieApp> {
               ), //row
               SizedBox(height: 11.0),
               Container(
-            width: double.infinity,
-            height: 200.0,
-
-            child: Row(
-              children: [
-                Expanded(
-                  child: StreamBuilder<QuerySnapshot>(
-                    stream: db.collection('featured').snapshots(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else
-                        return ListView(scrollDirection: Axis.horizontal,
-
-                          children:
-                          snapshot.data.docs.map((doc) {
-                            return InkWell(
-                              onTap: () {
-                                String _url = doc['dlink'];
-                                void _launchURL() async =>
-                                    await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
-                                _launchURL();
-                              },
-                              child: Column(
-                                children: <Widget>[
-                                  Row(
-                                    children:<Widget> [
-                                      Card(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8.0)),
-                                        elevation: 0.0,
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(8.0),
-                                          child: Image.network(
-                                            doc['poster'],
-                                            fit: BoxFit.fill,
-                                            width: 130.0,
-                                            height: 159.0,
-                                          ), //imgasset
-                                        ), //cliprect
-                                      ),
-                                    ],
-                                  ), //card
-                                  SizedBox(height: 5.0),
-                                  Text(
-                                    doc['title'],
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20.0,
-                                    ), //textstyle
-                                    textAlign: TextAlign.start,
-                                  ), //Text
-                                  // SizedBox(height: 5.0), //Sizedbox
-                                ],
-                              ),
+                width: double.infinity,
+                height: 200.0,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: db.collection('featured').snapshots(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: CircularProgressIndicator(),
                             );
-                          }).toList(),
-                        );
-                    },
-                  ),
+                          } else
+                            return ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: snapshot.data.docs.map((doc) {
+                                return InkWell(
+                                  onTap: () {
+                                    String _url = doc['dlink'];
+                                    void _launchURL() async =>
+                                        await canLaunch(_url)
+                                            ? await launch(_url)
+                                            : throw 'Could not launch $_url';
+                                    _launchURL();
+                                  },
+                                  child: Column(
+                                    children: <Widget>[
+                                      Row(
+                                        children: <Widget>[
+                                          Card(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0)),
+                                            elevation: 0.0,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                              child: Image.network(
+                                                doc['poster'],
+                                                fit: BoxFit.fill,
+                                                width: 130.0,
+                                                height: 159.0,
+                                              ), //imgasset
+                                            ), //cliprect
+                                          ),
+                                        ],
+                                      ), //card
+                                      SizedBox(height: 5.0),
+                                      Text(
+                                        doc['title'],
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20.0,
+                                        ), //textstyle
+                                        textAlign: TextAlign.start,
+                                      ), //Text
+                                      // SizedBox(height: 5.0), //Sizedbox
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                            );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-
-
-            ),
-          ),
+              ),
               // Container(
               //   width: double.infinity,
               //   height: 200.0,
@@ -265,14 +263,11 @@ class _MovieAppState extends State<MovieApp> {
               Padding(
                 padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
                 child: ElevatedButton(
-
                   style: ElevatedButton.styleFrom(
                     primary: Colors.transparent,
                     elevation: 0,
                   ),
-
                   child: Container(
-
                     height: 50.0,
                     decoration: BoxDecoration(
                       boxShadow: [
@@ -316,7 +311,6 @@ class _MovieAppState extends State<MovieApp> {
                   },
                 ), //flatbutton
               ),
-
 
               //testing
               // Padding(
@@ -373,7 +367,6 @@ class _MovieAppState extends State<MovieApp> {
               //   ), //flatbutton
               // ),//padding//box ..//testing
 
-
               Padding(
                 padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                 child: ElevatedButton(
@@ -422,14 +415,10 @@ class _MovieAppState extends State<MovieApp> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-
                             builder: (context) => HollywoodSearch()));
-
                   },
                 ), //flatbutton
               ),
-
-
 
               Padding(
                 padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),
@@ -475,12 +464,8 @@ class _MovieAppState extends State<MovieApp> {
                     adHelper.createInterAd();
                     adHelper.showInterAd();
 
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-
-                            builder: (context) => MarathiHits()));
-
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MarathiHits()));
                   },
                 ), //flatbutton
               ),
@@ -532,19 +517,10 @@ class _MovieAppState extends State<MovieApp> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-
                             builder: (context) => RegionalSearch()));
-
                   },
                 ), //flatbutton
               ),
-
-
-
-          
-
-
-
             ], //listveiwchildren
           ), //listveiw
         ), //padding
