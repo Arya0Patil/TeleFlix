@@ -1,7 +1,8 @@
 # telemovies
 
 A new Flutter project.
-
+My first Flutter Project.
+The code might be dedundant and not effectively structured. I am learning ....
 ## Getting Started
 
 This project is a starting point for a Flutter application.
