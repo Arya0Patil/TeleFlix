@@ -1,13 +1,13 @@
-# telemovies
+# Telemovies
 
 A new Flutter project.
 My first Flutter Project.
 The code might be dedundant and not effectively structured. I am learning ....
-This an app I built for my friend and is now live on play store with same same 'TeleFlix'
+This an app I built for my friend and is now live on play store with same name 'TeleFlix'
 
-On app you can browse for movies , also has a live chat feature where yiu can request movies.
+On the app you can browse for movies , also has a live chat feature where you can request movies.
 
-# Learnings
+## Learnings
 1. Importance of clean code (after wasting hours to fix a button)
 2. How to write clean code
 3. Writting reusable code
@@ -19,6 +19,8 @@ On app you can browse for movies , also has a live chat feature where yiu can re
 9. Working with AdMob
 10. Building a fullscale app from scratch.
 11. Publishing app on play store.
+12. Patience
+13. Handling Frusration.
 ## Getting Started
 
 This project is a starting point for a Flutter application.
