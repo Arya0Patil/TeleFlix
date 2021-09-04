@@ -3,6 +3,22 @@
 A new Flutter project.
 My first Flutter Project.
 The code might be dedundant and not effectively structured. I am learning ....
+This an app I built for my friend and is now live on play store with same same 'TeleFlix'
+
+On app you can browse for movies , also has a live chat feature where yiu can request movies.
+
+# Learnings
+1. Importance of clean code (after wasting hours to fix a button)
+2. How to write clean code
+3. Writting reusable code
+4. Indepth of Firestore and Firebase
+5. Using Firebase as backend
+6. Streams, Futures, Snapshots from firestore.
+7. Firestore security
+8. Scalable code
+9. Working with AdMob
+10. Building a fullscale app from scratch.
+11. Publishing app on play store.
 ## Getting Started
 
 This project is a starting point for a Flutter application.
