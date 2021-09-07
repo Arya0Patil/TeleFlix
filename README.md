@@ -2,7 +2,7 @@
 
 A new Flutter project.
 My first Flutter Project.
-The code might be dedundant and not effectively structured. I am learning ....
+The code might be redundant and not effectively structured. I am learning ....
 App is now live on play store with same name 'TeleFlix'
 
 On the app you can browse for movies , also has a live chat feature where you can request movies.
