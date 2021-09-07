@@ -1,4 +1,4 @@
-# Telemovies
+# Teleflix
 
 A new Flutter project.
 My first Flutter Project.
