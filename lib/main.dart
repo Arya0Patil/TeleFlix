@@ -1,11 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:facebook_audience_network/ad/ad_banner.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:telemovies/bollywood.dart';
 import 'package:telemovies/marathi.dart';
+import 'package:telemovies/screens/auth_screen.dart';
+import 'package:telemovies/screens/chatScreen.dart';
 import 'package:unity_ads_plugin/unity_ads.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'chatscreen.dart';
+
 import 'bollywoodSearch.dart';
 import 'hollywoodSearch.dart';
 import 'ad_helper.dart';
@@ -15,12 +22,17 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   WidgetsFlutterBinding.ensureInitialized();
-  AdHelper.initialize();
+  // AdHelper.initialize();
 
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -58,7 +70,76 @@ class MyApp extends StatelessWidget {
                 ), //tab
               ],
             ), //tabbar
-          ), //appbar
+          ),
+          // drawer: Drawer(
+          //   child: ListView(
+          //     padding: EdgeInsets.zero,
+          //     children: [
+          //       DrawerHeader(
+          //         child: Text(
+          //           "Teleflix",
+          //           style: TextStyle(
+          //             fontSize: 25.0,
+          //             color: Colors.white,
+          //           ),
+          //         ),
+          //         decoration: BoxDecoration(
+          //           color: Color(0xff303960),
+          //         ),
+          //       ),
+          //       ListTile(
+          //         title: Text(
+          //           'Rate Us',
+          //           style: TextStyle(fontSize: 20.0),
+          //         ),
+          //         onTap: () {
+          //           const _url =
+          //               'https://play.google.com/store/apps/details?id=com.telemovie.tech';
+          //           void _launchURL() async => await canLaunch(_url)
+          //               ? await launch(_url)
+          //               : throw 'Could not launch $_url';
+          //           _launchURL();
+          //         },
+          //       ),
+          //       ListTile(
+          //         title: Text(
+          //           "Request Movie",
+          //           style: TextStyle(fontSize: 20.0),
+          //         ),
+          //         onTap: () {
+          //           Navigator.push(context,
+          //               MaterialPageRoute(builder: (context) => MarathiHits()));
+          //         },
+          //       ),
+          //       ListTile(
+          //         title: DropdownButton(
+          //           underline: SizedBox(),
+          //           items: [
+          //             DropdownMenuItem(
+          //               child: Container(
+          //                 width: 240,
+          //                 child: Text(
+          //                     "We incur costs to keep the app functional. Ads helps us to do so while keeping our app free to use."),
+          //               ),
+          //             ),
+          //           ],
+          //           onChanged: (ctx) {},
+          //           hint: Text(
+          //             "Why Ads",
+          //             style: TextStyle(
+          //                 color: Colors.black,
+          //                 fontSize: 20.0,
+          //                 fontWeight: FontWeight.w500),
+          //           ),
+          //           // icon: Icon(
+          //           //   Icons.arrow_drop_down_circle,
+          //           //   color: Colors.white,
+          //           // ),
+          //         ),
+          //       )
+          //     ],
+          //   ),
+          // ), //appbar
           body: TabBarView(
             children: <Widget>[
               MovieApp(),
@@ -92,28 +173,46 @@ class MovieApp extends StatefulWidget {
 class _MovieAppState extends State<MovieApp> {
   @override
   initState() {
-    super.initState();
-
-    UnityAds.init(
-      gameId: "4217249",
-      testMode: false,
-    );
-  }
-
-  void loadVideoAd() async {
-    UnityAds.isReady(placementId: "bmi").then((value) {
-      if (value == true) {
-        UnityAds.showVideoAd(
-          placementId: "bmi",
-        );
-      } else {
-        print('ads not loaded');
-      }
+    final fbm = FirebaseMessaging;
+    // When the app is completely closed (not in the background) and opened directly from the push notification
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage message) {
+      print('getInitialMessage data: ${message.data}');
     });
+
+    //App is open and recievs notif
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification notification = message.notification;
+      AndroidNotification android = message.notification?.android;
+    });
+
+    // replacement for onResume: When the app is in the background
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('onMessageOpenedApp data: ${message.data}');
+    });
+    super.initState();
+    // adHelper.createInterAd();
+    // UnityAds.init(
+    //   gameId: "4217249",
+    //   testMode: false,
+    // );
   }
+
+  // void loadVideoAd() async {
+  //   UnityAds.isReady(placementId: "bmi").then((value) {
+  //     if (value == true) {
+  //       UnityAds.showVideoAd(
+  //         placementId: "bmi",
+  //       );
+  //     } else {
+  //       print('ads not loaded');
+  //     }
+  //   });
+  // }
 
   final db = FirebaseFirestore.instance;
-  AdHelper adHelper = new AdHelper();
+  // AdHelper adHelper = new AdHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -124,14 +223,15 @@ class _MovieAppState extends State<MovieApp> {
               end: Alignment.bottomRight,
               colors: [Color(0xff132743), Color(0xff31112c)])),
       child: Scaffold(
-        bottomNavigationBar: Container(
-          height: 75.0,
-          padding: EdgeInsets.all(10.0),
-          child: AdWidget(
-            key: UniqueKey(),
-            ad: AdHelper.createBannerAd()..load(),
-          ),
+        bottomNavigationBar: FacebookBannerAd(
+          keepAlive: true,
+          placementId: "406069140874705_406094160872203",
         ),
+
+        // AdWidget(
+        //   key: UniqueKey(),
+        //   ad: AdHelper.createBannerAd()..load(),s
+
         backgroundColor: Colors.transparent,
         //     The JKS keystore uses a proprietary format. It is recommended to migrate to PKCS12 which is an industry standard format using "keytool -importkeystore -
         // srckeystore c:\Users\one\upload-keystore.jks -destkeystore c:\Users\one\upload-keystore.jks -deststoretype pkcs12".
@@ -229,34 +329,7 @@ class _MovieAppState extends State<MovieApp> {
                   ],
                 ),
               ),
-              // Container(
-              //   width: double.infinity,
-              //   height: 200.0,
-              //   child: ListView(scrollDirection: Axis.horizontal, children: [
-              //     Padding(
-              //       padding: const EdgeInsets.symmetric(horizontal: 11.0),
-              //       child: MovieCard("Bahubali", "images/Baahubali_poster.jpg"),
-              //     ),
-              //     // Padding(
-              //     //   padding: const EdgeInsets.symmetric(horizontal: 11.0),
-              //     //   child: MovieCard("Dabaang 3", "images/Dabaang_poster.jpg"),
-              //     // ),
-              //     // Padding(
-              //     //   padding: const EdgeInsets.symmetric(horizontal: 11.0),
-              //     //   child: MovieCard("M.S.Dhoni", "images/msd_poster.jpg"),
-              //     // ),
-              //     // Padding(
-              //     //   padding: const EdgeInsets.symmetric(horizontal: 11.0),
-              //     //   child: MovieCard("Chhichhore", "images/chichore_poster.jpg"),
-              //     // ),
-              //   ]), //listveiw
-              // ), //container
-              //
-              // Container(
-              //
-              //   height: 75.0,
-              //   child: AdWidget(key: UniqueKey(),ad: AdHelper.createBannerAd()..load(),),
-              // ),
+
               SizedBox(
                 height: 20.0,
               ),
@@ -301,8 +374,8 @@ class _MovieAppState extends State<MovieApp> {
                     ), //center
                   ),
                   onPressed: () {
-                    loadVideoAd();
-                    adHelper.createInterAd();
+                    // loadVideoAd();
+                    // adHelper.createInterAd();
 
                     Navigator.push(
                         context,
@@ -408,9 +481,9 @@ class _MovieAppState extends State<MovieApp> {
                     ), //center
                   ), //container ,
                   onPressed: () {
-                    adHelper.createInterAd();
+                    // adHelper.createInterAd();
 
-                    adHelper.showInterAd();
+                    // adHelper.showInterAd();
 
                     Navigator.push(
                         context,
@@ -461,8 +534,8 @@ class _MovieAppState extends State<MovieApp> {
                     ), //center
                   ), //container ,
                   onPressed: () {
-                    adHelper.createInterAd();
-                    adHelper.showInterAd();
+                    // adHelper.createInterAd();
+                    // adHelper.showInterAd();
 
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => MarathiHits()));
@@ -511,8 +584,8 @@ class _MovieAppState extends State<MovieApp> {
                     ), //center
                   ), //container ,
                   onPressed: () {
-                    adHelper.createInterAd();
-                    adHelper.showInterAd();
+                    // adHelper.createInterAd();
+                    // adHelper.showInterAd();
 
                     Navigator.push(
                         context,
@@ -575,8 +648,6 @@ class MoviesScreen extends StatelessWidget {
     );
   }
 }
-
-
 
 //****************************Hollywood movie screen************************************ */
 // class Hollywood_Screen extends StatelessWidget {

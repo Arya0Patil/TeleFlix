@@ -1,3 +1,4 @@
+import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:telemovies/widgets/messages.dart';
 import 'package:telemovies/widgets/newMessages.dart';
@@ -9,16 +10,17 @@ class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomNavigationBar: Container(
-          height: 60.0,
-          child: AdWidget(
-            key: UniqueKey(),
-            ad: AdHelper.createBannerAd()..load(),
-          ),
-        ),
+        // bottomNavigationBar: Container(
+        //   height: 60.0,
+        //   child: AdWidget(
+        //     key: UniqueKey(),
+        //     ad: AdHelper.createBannerAd()..load(),
+        //   ),
+        // ),
         appBar: AppBar(
           actions: [
             DropdownButton(
+              underline: SizedBox(),
               items: [
                 DropdownMenuItem(
                   child: Container(
@@ -54,8 +56,17 @@ class ChatScreen extends StatelessWidget {
         body: Container(
           child: Column(
             children: [
-              Expanded(
-                child: Messages(),
+              Container(
+                height: 50.0,
+                child: FacebookBannerAd(
+                  keepAlive: true,
+                  placementId: "406069140874705_406095640872055",
+                ),
+              ),
+              Container(
+                child: Expanded(
+                  child: Messages(),
+                ),
               ),
               NewMessage(),
             ],

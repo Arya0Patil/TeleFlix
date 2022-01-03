@@ -122,7 +122,7 @@ class _Bollywood_ScreenState extends State<Bollywood_Screen> {
                     );
                   } else
                     return ListView(
-                      children: snapshot.data.docs.map((doc) {
+                      children: snapshot.data.docs.map<Widget>((doc) {
                         return Card(
                           child: Container(
                             decoration: BoxDecoration(
